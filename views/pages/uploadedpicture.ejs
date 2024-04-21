@@ -1,0 +1,11 @@
+<!-- <img
+	src="<%= (locals.image) ? image : ''%>"
+	alt="<%= (locals.caption) ? caption : '' %>"
+/><br />
+<p><%= (locals.caption) ? caption : '' %></p> -->
+
+
+<% userFeed.forEach(feedItem => { %>
+  <img src="<%= feedItem.image || '' %>" alt="<%= feedItem.caption || '' %>"/><br />
+  <p><%= feedItem.caption || '' %></p>
+<% }) %>

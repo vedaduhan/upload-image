@@ -1,0 +1,234 @@
+<!-- <h1>Upload an image</h1>
+<form action="/upload" method="post" enctype="multipart/form-data" id="uploadform">
+  <%- (locals.messages.error) ? ` <div class="error">${messages.error}</div>
+    ` : '' %>
+    <label for="picture">Your image</label>
+    <input type="file" name="picture" id="picture" />
+
+    <label for="caption">Caption</label>
+    <input type="text" placeholder="Caption" name="caption" id="caption" value="<%= (locals.caption)?caption:'' %>" />
+
+    <input type="submit" value="Upload" />
+</form> -->
+
+<!-- <h1>Upload an image</h1>
+<form action="/upload" method="post" enctype="multipart/form-data" id="uploadform">
+  <% if (user) { %>
+    <a href="/logout" class="logout-button">Logout</a>
+  <% } %>
+  <% if (messages.error) { %>
+    <div class="error"><%= messages.error %></div>
+  <% } %>
+  <label for="picture">Your image</label>
+  <input type="file" name="picture" id="picture" />
+
+  <label for="caption">Caption</label>
+  <input type="text" placeholder="Caption" name="caption" id="caption" value="<%= (locals.caption)?caption:'' %>" />
+
+  <input type="submit" value="Upload" />
+</form> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <style>
+    /* Your existing CSS styles here */
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #080710;
+      margin: 0;
+      padding: 0;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.13);
+      border-radius: 10px;
+      box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+      color: #333;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .section-container {
+      background-color: rgba(255, 255, 255, 0.13);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+    }
+
+    .icon-button {
+      width: 220px;
+      height: 50px;
+      border: none;
+      outline: none;
+      color: #fff;
+      background: #111;
+      cursor: pointer;
+      position: relative;
+      z-index: 0;
+      border-radius: 10px;
+      margin-left: 10px;
+    }
+
+    /* Rest of your CSS styles */
+
+    .error {
+      color: red;
+      margin-bottom: 10px;
+    }
+
+    .logout-button {
+      background-color: #ff512f;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      /* move the button to the right */
+      float: right;
+    }
+
+    .upload-form-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .upload-form-container .form-horizontal {
+      display: flex;
+      flex-direction: row;
+      /* Change from column to row */
+    }
+
+    .upload-form-container .form-horizontal label {
+      margin-right: 10px;
+      /* Adjust spacing between label and input */
+    }
+
+    .upload-form-container .form-horizontal input[type="text"],
+    .upload-form-container .form-horizontal input[type="file"],
+    .upload-form-container .form-horizontal input[type="submit"] {
+      margin-right: 10px;
+      /* Adjust spacing between inputs */
+    }
+
+    .card1 {
+      margin-top: 20px;
+      background-color: rgba(255, 255, 255, 0.27);
+      /* Updated card background color */
+      padding: 10px;
+      border-radius: 3px;
+      width: 600px;
+      margin: 0 auto;
+      
+    }
+
+    .card1 img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .card1 .container {
+      margin-top: 10px;
+    }
+
+    .card1 h4 {
+      color: #ffffff;
+      /* Updated card heading color */
+    }
+
+    .card1 p {
+      color: #ffffff;
+      /* Updated card text color */
+    }
+    
+    /* IMAGE ZOOM */
+    .zoom-image {
+      cursor: pointer;
+      transition: transform .2s;
+    }
+
+    .zoom-image:hover {
+      transform: scale(1.1);
+    }
+
+    .upload-feed-container {
+      margin-top: 20px;
+    }
+
+    .upload-feed-container h2 {
+      color: #ffffff;
+      /* Updated heading color */
+    }
+    
+  </style>
+</head>
+
+<body>
+
+  <!-- Your HTML code here -->
+  <% if (user) { %>
+    <div class="section-container">
+      <a href="/logout" class="logout-button">Logout</a>
+      <a href="/" style="text-decoration: none; color: inherit;">
+        <h1>Hello <%= user.username %>
+        </h1>
+      </a>
+      <% } %>
+    </div>
+
+    <div class="upload-form-container">
+      <% if (messages.error) { %>
+        <div class="error">
+          <%= messages.error %>
+        </div>
+        <% } %>
+
+          <form action="/upload" method="post" enctype="multipart/form-data" id="uploadform" class="form-horizontal">
+            <label for="picture">Your new image?</label>
+            <input type="file" name="picture" id="picture" />
+
+            <label for="caption">Caption</label>
+            <input type="text" placeholder="Caption" name="caption" id="caption"
+              value="<%= (locals.caption)?caption:'' %>" />
+
+            <input type="submit" value="Upload" id="uploadButton" disabled />
+          </form>
+    </div>
+    <div class="upload-feed-container">
+      <h2>Recent uploads</h2>
+      <% responseData ? responseData.forEach(feedItem => { %>
+        <div class="card1">
+          <img src="<%= feedItem.image %>" alt="<%= feedItem.upload_author %>" style="width:100%" class="zoom-image">
+          <div class="container">
+            <h4><b>
+                <%= feedItem.upload_author %>
+              </b></h4>
+            <p>
+              <%= feedItem.upload_description %>
+            </p>
+          </div>
+        </div>
+        <% }) : '' %>
+    </div>
+    <script>
+      document.getElementById('picture').addEventListener('change', function() {
+        var uploadButton = document.getElementById('uploadButton');
+        uploadButton.disabled = !this.value; // Disable if no file selected, enable otherwise
+      });
+    </script>
+</body>
+
+</html>

@@ -29,3 +29,5 @@ CREATE TABLE `users` (
 npm install
 
 npm run app
+
+mysql database dump in Data folder 
